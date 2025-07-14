@@ -1,14 +1,18 @@
-services:
-  - name: webadmin
-    knock_ports: [1111, 2222, 3333]
-    allow_port: 99
-    expire_seconds: 300
-    step_timeout_seconds: 10
-    interface: eth0
+# 示例配置，请根据你的需求修改或添加多个服务。
+# 每个服务必须包含以下字段：
+# - name: 服务名称（自定义）
+# - interface: 绑定网卡名（如 eth0）
+# - knock_ports: 敲门端口序列
+# - allow_port: 放行的目标端口（如 SSH 22）
+# - expire_seconds: 授权持续时间（秒）
+# - step_timeout_seconds: 每步敲门最大间隔（秒）
 
-  - name: test
-    knock_ports: [7000, 8000, 9000]
-    allow_port: 1001
-    expire_seconds: 300
-    step_timeout_seconds: 10
-    interface: eth0
+services:
+  # 下面是一个示例服务，你需要删除 '#' 取消注释，并修改参数
+  #
+  #- name: webadmin
+  #  interface: eth0
+  #  knock_ports: [1111, 2222, 3333]
+  #  allow_port: 80
+  #  expire_seconds: 300
+  #  step_timeout_seconds: 5
