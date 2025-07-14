@@ -1,0 +1,14 @@
+services:
+  - name: webadmin
+    knock_ports: [1111, 2222, 3333]
+    allow_port: 99
+    expire_seconds: 300
+    step_timeout_seconds: 10
+    interface: eth0
+
+  - name: test
+    knock_ports: [7000, 8000, 9000]
+    allow_port: 1001
+    expire_seconds: 300
+    step_timeout_seconds: 10
+    interface: eth0
