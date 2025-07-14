@@ -19,7 +19,7 @@ PortKnock 是一个基于 Linux `nftables` 的轻量级端口敲门服务。它�
 你可以通过以下命令快速安装并运行 PortKnock：
 
 ```bash
-curl -fsSL https://github.com/yubo/portknock/blob/main/install.sh | bash
+curl -fsSL https://github.com/yubo/portknock//raw//main/install.sh | bash
 ```
 
 该脚本会自动完成以下操作：
