@@ -12,14 +12,43 @@ echo "🔍 获取最新 Release 版本号..."
 LATEST_TAG=$(curl -s "https://api.github.com/repos/$REPO/releases/latest" | grep -Po '"tag_name": "\K.*?(?=")')
 echo "最新版本：$LATEST_TAG"
 
-BINARY_URL="https://github.com/$REPO/releases/download/$LATEST_TAG/$BINARY_NAME"
+function get_local_version() {
+    if [ -x "$BINARY_PATH" ]; then
+        # 尝试获取本地版本
+        local ver
+        ver=$("$BINARY_PATH" --version 2>/dev/null || true)
+        echo "$ver"
+    else
+        echo ""
+    fi
+}
 
-echo "🔧 创建目录..."
-sudo mkdir -p "$CONFIG_DIR" "$LOG_DIR"
+LOCAL_VERSION=$(get_local_version)
+echo "本地版本：${LOCAL_VERSION:-无}"
 
-echo "📥 下载最新版本二进制文件..."
-sudo curl -L --fail "$BINARY_URL" -o "$BINARY_PATH"
-sudo chmod +x "$BINARY_PATH"
+if [ "$LOCAL_VERSION" = "$LATEST_TAG" ]; then
+    echo "🎉 当前已是最新版本，无需更新二进制文件。"
+else
+    echo "⬇️ 需要更新二进制文件..."
+    BINARY_URL="https://github.com/$REPO/releases/download/$LATEST_TAG/$BINARY_NAME"
+    TMP_PATH="/usr/local/bin/${BINARY_NAME}.tmp"
+
+    echo "🔧 创建目录..."
+    sudo mkdir -p "$CONFIG_DIR" "$LOG_DIR"
+
+    echo "📥 下载最新版本二进制文件..."
+    sudo curl -L --fail "$BINARY_URL" -o "$TMP_PATH"
+    sudo chmod +x "$TMP_PATH"
+    
+    # 如果程序正在运行，先停止服务
+    if systemctl is-active --quiet portknock; then
+        echo "⏸️  服务正在运行，先停止服务..."
+        sudo systemctl stop portknock
+    fi
+
+    echo "🔄 替换二进制文件..."
+    sudo mv "$TMP_PATH" "$BINARY_PATH"
+fi
 
 echo "⚙️ 检查配置文件..."
 if [ ! -f "$CONFIG_DIR/config.yaml" ]; then
