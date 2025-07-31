@@ -47,6 +47,8 @@ services:
     allow_port: 80
     expire_seconds: 300
     step_timeout_seconds: 5
+    whitelist: 
+    - 127.0.0.1    
 ```
 
 - `name`: 服务名称，用于日志标识
@@ -55,6 +57,7 @@ services:
 - `allow_port`: 敲门成功后放行的目标端口
 - `expire_seconds`: 授权持续时间（秒）
 - `step_timeout_seconds`: 每步敲门最大间隔（秒）
+- `whitelist`: 白名单列表 (数组/列表)
 
 ---
 

@@ -8,13 +8,15 @@ import (
 )
 
 type ServiceConfig struct {
-	Name          string  `yaml:"name"`
-	KnockPorts    []int   `yaml:"knock_ports"`
-	AllowPort     uint16  `yaml:"allow_port"`
-	ExpireSeconds int     `yaml:"expire_seconds"`
-	Interface     string  `yaml:"interface"` // 👈 添加这一行
-	StepTimeoutSeconds int `yaml:"step_timeout_seconds"`
+	Name               string   `yaml:"name"`
+	KnockPorts         []int    `yaml:"knock_ports"`
+	AllowPort          uint16   `yaml:"allow_port"`
+	ExpireSeconds      int      `yaml:"expire_seconds"`
+	Interface          string   `yaml:"interface"`
+	StepTimeoutSeconds int      `yaml:"step_timeout_seconds"`
+	Whitelist          []string `yaml:"whitelist"` // 👈 新增字段
 }
+
 
 
 type Config struct {

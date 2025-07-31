@@ -6,13 +6,14 @@
 # - allow_port: 放行的目标端口（如 SSH 22）
 # - expire_seconds: 授权持续时间（秒）
 # - step_timeout_seconds: 每步敲门最大间隔（秒）
-
+# - whitelist: 白名单列表 [ 如果没有白名单则将值变为 "[]"]
+# 注意：127.0.0.1 默认不放行，有需要则需要添加至白名单
 services:
-  # 下面是一个示例服务，你需要删除 '#' 取消注释，并修改参数
-  #
-  #- name: webadmin
-  #  interface: eth0
-  #  knock_ports: [1111, 2222, 3333]
-  #  allow_port: 80
-  #  expire_seconds: 300
-  #  step_timeout_seconds: 5
+  - name: webadmin
+    interface: eth0
+    knock_ports: [1111, 2222, 3333]
+    allow_port: 99
+    expire_seconds: 300
+    step_timeout_seconds: 5
+    whitelist: 
+    - 127.0.0.1

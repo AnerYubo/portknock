@@ -38,14 +38,29 @@ func NewKnockServer(cfg *config.ServiceConfig, nft *nftmanager.Manager, portToSe
         log.Fatalf("[%s] 创建专属链失败: %v", cfg.Name, err)
     }
 
-    return &KnockServer{
+    // ✅ 初始化服务结构
+    server := &KnockServer{
         cfg:           cfg,
         nft:           nft,
         stateMap:      make(map[string]*KnockState),
         portToService: portToService,
         allowChain:    allowChain,
     }
+
+    // ✅ 添加白名单 IP（一次性写入 rules）
+    for _, ip := range cfg.Whitelist {
+        err := nft.AllowIP(cfg.Name, ip, int(cfg.AllowPort), cfg.ExpireSeconds, allowChain)
+        if err != nil {
+            utils.LogError("[%s] 添加白名单 %s 失败: %v", cfg.Name, ip, err)
+        } else {
+            utils.LogInfo("[%s] 已添加白名单 IP: %s", cfg.Name, ip)
+            // 不加定时器，白名单永久有效（也可加一个极长的超时）
+        }
+    }
+
+    return server
 }
+
 func (s *KnockServer) BlockAll() error {
     return s.nft.AddBlockRule(s.cfg.Name, int(s.cfg.AllowPort))
 }
