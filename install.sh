@@ -30,7 +30,7 @@ if [ "$LOCAL_VERSION" = "$LATEST_TAG" ]; then
     echo "🎉 当前已是最新版本，无需更新二进制文件。"
 else
     echo "⬇️ 需要更新二进制文件..."
-    BINARY_URL="https://github.com/$REPO/releases/download/$LATEST_TAG/$BINARY_NAME"
+    BINARY_URL="https://github.com/$REPO/releases/download/$LATEST_TAG/$BINARY_NAME.$LATEST_TAG"
     TMP_PATH="/usr/local/bin/${BINARY_NAME}.tmp"
 
     echo "🔧 创建目录..."
