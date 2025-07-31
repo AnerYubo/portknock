@@ -4,7 +4,9 @@ import (
     "log"
     "sync"
     "time"
-
+    "flag"
+    "fmt"
+    "os"
     "github.com/google/gopacket"
     "github.com/google/gopacket/afpacket"
     "github.com/google/gopacket/layers"
@@ -16,6 +18,7 @@ import (
     "portknock/nftmanager"
 )
 
+var Version = "dev"
 type KnockState struct {
     SeqIndex     int
     LastTime     time.Time
@@ -291,6 +294,13 @@ func (s *KnockServer) resetStateIfInvalidAccess(srcIP string, dstPort int) bool 
     return true
 }
 func main() {
+    versionFlag := flag.Bool("version", false, "Print version and exit")
+    flag.Parse()
+
+    if *versionFlag {
+        fmt.Println(Version)
+        os.Exit(0)
+    }    
     logFilePath := "/var/log/portknock/app.log"
     if err := utils.InitLogger(logFilePath); err != nil {
         log.Fatalf("日志初始化失败: %v", err)
